@@ -1,0 +1,22 @@
+# How to ignore file in Github.
+# https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# Intermediate Files #
+######################
+*.mat
+*.sgy
+*.segy
+*.exe
+*.las
+*.o
+
+# ignores all .md files
+.md
+
+# does not ignore the README.md file
+!README.md
+
+
+
+# Packages #
+############

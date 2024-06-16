@@ -8,6 +8,7 @@ The code includes the finite difference modeling for elastic media.
 3. Contains several examples in the directory named "scripts."
 
 Here is one snippet of the result generated using the FDwave code.
+![Screenshot from 2024-06-17 02-51-50](https://github.com/ajmalkoti/FDwave/assets/18071122/8cb670b6-6dcf-4941-9fd0-c59c35df2f74)
 
      
 

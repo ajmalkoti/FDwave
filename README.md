@@ -29,5 +29,3 @@ SCRIPTS: This directory contains sample files for the simulation of different mo
 References:
 
     Malkoti, A., Vedanti, N., Tiwari, R. K., 2018. An algorithm for fast elastic wave simulation using a vectorized finite difference operator. Computers & Geosciences 116, 23-31
-
-    Malkoti, A., Vedanti, N., Tiwari, R. K., 2018. Viscoelastic modeling with a vectorized finite difference operator.

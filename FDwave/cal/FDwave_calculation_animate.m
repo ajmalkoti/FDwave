@@ -29,7 +29,7 @@ function FDwave_calculation_animate(varargin)
 %      FDwave_calculation_animate('WFP',wf_path,'dx',5,'dz',5,'dt',0.0005,...
 %         'WFFileName','Data_OP\wavefield_1',  'mFileName','Data_IP\model'); 
 %
-global wfp
+global wfp verbose ploton 
 
 for i=1:2:length(varargin)
     switch lower(varargin{i})
@@ -74,8 +74,8 @@ end
 if ~exist('clip','var');        clip=1;     end
 if ~exist('scale','var');       scale=1;    end
 
-if ~exist('dh','var');     load([ipdir,'model'],'dh');     end
-if ~exist('dv','var');     load([ipdir,'model'],'dv');     end
+if ~exist('dh','var');     load([ipdir,'model.mat'],'dh');     end
+if ~exist('dv','var');     load([ipdir,'model.mat'],'dv');     end
 if ~exist('dt','var');     load([ipdir,'source'],'dt');    end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,8 +189,13 @@ for i=1:nFrames;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% https://in.mathworks.com/matlabcentral/answers/426314-movie2avi-has-been-removed
+
 str=[wfp,'/Data_OP/wave_',num2str(shotNo),'.avi'];
 movie2avi(Frames, str, 'compression', 'none');
+
+
+
 end
 
 

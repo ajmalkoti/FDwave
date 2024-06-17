@@ -1,4 +1,4 @@
-function model_build_shape_arbitrary(varargin)%nhvec,nvvec,value)
+function FDwave_model_build_shape_arbitrary(varargin)%nhvec,nvvec,value)
 % MODEL_BUILD_SHAPE_ARBITRARY
 % This function can be used to create a shape/object of arbitrary shape.
 % The shape is defined by a set of points connected linearly.

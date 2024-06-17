@@ -1,4 +1,4 @@
-function BC = BC_damp(cpath,BCtype,nAB )
+function BC = bc_damp(cpath,BCtype,nAB )
 %DAMP Summary of this function goes here
 %   nAB : no of nodes used for damping
 %   BCtype : type of BC viz. 'topFS' means top edge as free surface

@@ -1,4 +1,4 @@
-function  calculation_wiggle_plot( varargin)%ipstr,    xF,xL,xD,    tF,tL,tD,  figNo, shotno )
+function  FDwave_calculation_wiggle_plot( varargin)%ipstr,    xF,xL,xD,    tF,tL,tD,  figNo, shotno )
 %CALCULATION_WIGGLE_PLOT Summary of this function goes here
 %   This function is under testing
 %   Detailed explanation goes here
@@ -18,6 +18,7 @@ for i=1:2:length(varargin)
         case 'tf';                          tF = varargin{i+1};
         case 'tl';                          tL = varargin{i+1};
         case 'td';                          tD = varargin{i+1};
+        case 'prct';                       prct = varargin{i+1};
         case 'clip';                      clip = varargin{i+1};
         case 'scale';                   scale = varargin{i+1};
         otherwise
@@ -25,9 +26,10 @@ for i=1:2:length(varargin)
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if ~exist('wfp','var');                           
-    wfp=pwd;                       
-end;
+if ~exist('wfp','var')
+    wfp=pwd;
+end
+
 ipdirpath = [wfp,filesep,'Data_IP',filesep];
 opdirpath = [wfp,filesep,'Data_OP',filesep];
 fname = [opdirpath,FileName];
@@ -49,8 +51,14 @@ if ~exist('rnD','var');      rnD=1;       end
 if ~exist('tF','var');      tF=1;       end
 if ~exist('tL','var');      tL= size(SS,1) ;       end
 if ~exist('tD','var');      tD=1;       end
+
+if ~exist('prct','var')     
+    prct=99;       
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [N,rec_n]=size(SS);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if exist('clip','var')
     if isnumeric(clip)
@@ -71,6 +79,22 @@ if exist('scale','var')
         end
     else
        error('Parameter "scale" is not a number. ') 
+    end
+end
+
+
+if exist('prct','var')
+    if isnumeric(prct)
+        temp = SS(:);
+        val = prctile(temp,prct);
+        
+        idx = SS>val;
+        SS(idx) = val;
+        
+        idx = SS< -val;
+        SS(idx) = -val;
+    else
+        error('Error: Parameter "prct" should be a number. ')
     end
 end
 

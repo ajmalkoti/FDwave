@@ -1,4 +1,4 @@
-function bc_plot(wfp )
+function FDwave_bc_plot(wfp )
 %BC_PLOT Summary of this function goes here
 %   Detailed explanation goes here
 

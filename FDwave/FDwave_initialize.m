@@ -9,13 +9,14 @@ function FDwave_initialize(varargin)%code_path,current_path,clean)
 %       CLEAN   :   Start a clean working environment (delete all previous data).
 %                       (default: 'n')
 
-clc; close all;
+%%% clc; close all;
 
+global cp
+global wfp
+global verbose
 
 for i=1:2:length(varargin)
     switch lower(varargin{i})
-%         case 'cp';         cpi=varargin{i+1};
-%         case 'wfp';        wfpi=varargin{i+1};
         case 'clean';      clean=varargin{i+1};
         case 'verbose';    verbose=varargin{i+1};
         otherwise;      error('%s is not a valid argument name',varargin{i});
@@ -23,20 +24,6 @@ for i=1:2:length(varargin)
 end
 
 
-global wfp
-% if ~exist('wfp','var')    
-%     wfp=pwd;   
-% else
-%     wfp=wfpi;
-% end
-
-
-global cp
-% if ~exist('cp','var')    
-%     cp=pwd;      
-% else
-%     cp = cpi;
-% end
 
 if ~exist('clean','var')
     clean ='n';         

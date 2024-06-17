@@ -1,4 +1,4 @@
-function [src,t] = source_gaussian1(varargin)   %T,dt,f0,t0,src_scale)
+function [src,t] = FDwave_source_gaussian1(varargin)  
 % SOURCE_GAUSSIAN1
 % This function generates the gaussian1 wavelet signature.
 % Complete Syntax:

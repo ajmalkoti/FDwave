@@ -1,4 +1,4 @@
-function calculation_plot_WF(varargin)%(ipstr,figNO, shotno)
+function FDwave_calculation_plot_WF(varargin)
 % CALCULATION_PLOT
 % This function is used for plotting the Wavefield with scaling
 % and clipping the amplitudes.

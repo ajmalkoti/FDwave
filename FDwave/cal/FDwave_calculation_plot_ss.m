@@ -1,4 +1,4 @@
-function FDwave_calculation_plot_ss(varargin)%(ipstr,figNO, shotno)
+function FDwave_calculation_plot_ss(varargin)
 % CALCULATION_PLOT
 % This function is used for plotting the synthetic seimogram with scaling
 % and clipping the amplitudes.
@@ -28,6 +28,7 @@ for i=1:2:length(varargin)
         case 'figno';                     figNO = varargin{i+1};
         case 'subfigno';                   sfNO = varargin{i+1};
         case 'clip';                       clip = varargin{i+1};
+        case 'prct';                       prct = varargin{i+1};
         case 'scale';                     scale = varargin{i+1};
         otherwise
            error('%s is not a valid argument name',varargin{i});
@@ -35,12 +36,18 @@ for i=1:2:length(varargin)
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if ~exist('FileName','var');                error('Please enter the file name');         end
-if ~exist('geometry_type','var');      geometry_type='surface';     end
+if ~exist('FileName','var')
+    error('Please enter the file name');         
+end
 
-if ~exist('wfp','var');                           
+if ~exist('geometry_type','var')
+    geometry_type='surface';     
+end
+
+if ~exist('wfp','var')                  
     wfp=pwd;                       
-end;
+end
+
 ipdirpath = [wfp,filesep,'Data_IP',filesep];
 opdirpath = [wfp,filesep,'Data_OP',filesep];
 
@@ -50,6 +57,10 @@ if ~exist('dt','var');      load([opdirpath,FileName],'dt');     end
 if ~exist('figNO','var');       h=figure();             end
 if  exist('figNO','var');       h=figure(figNO);        end
 if  ~exist('sfNO','var');      sfNO=[1,1,1];        end
+
+if ~exist('prct','var')     
+    prct=99;       
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load([opdirpath,FileName],'SS');             
@@ -68,11 +79,27 @@ if exist('clip','var')
     end
 end
 
+
+if exist('prct','var')
+    if isnumeric(prct)
+        temp = SS(:);
+        val = prctile(temp,prct);
+        
+        idx = SS>val;
+        SS(idx) = val;
+        
+        idx = SS< -val;
+        SS(idx) = -val;
+    else
+        error('Error: Parameter "prct" should be a number. ')
+    end
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if exist('scale','var')
     if isnumeric(scale)
         scaling= linspace(1,scale,N);
-        for j=1:rec_n;
+        for j=1:rec_n
             SS(:,j)=SS(:,j).*(2.^scaling');
         end
     else

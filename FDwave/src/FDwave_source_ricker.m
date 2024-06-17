@@ -1,4 +1,4 @@
-function [src,t] = FDwave_source_ricker(varargin)   %T,dt,f0,t0,src_scale)
+function [src,t] = FDwave_source_ricker(varargin)  
 % SOURCE_RICKER
 % This function generates the ricker wavelet signature.
 % Complete Syntax:
@@ -16,6 +16,8 @@ function [src,t] = FDwave_source_ricker(varargin)   %T,dt,f0,t0,src_scale)
 
 
 global wfp
+global verbose
+
 ipdir = [wfp,filesep,'Data_IP',filesep];
 opdir = [wfp,filesep,'Data_OP',filesep];
 

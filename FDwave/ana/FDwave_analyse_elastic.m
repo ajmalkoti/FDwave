@@ -1,4 +1,4 @@
-function analyse_elastic(varargin)%dt,f0,dh,dv,vpm,vsm)
+function FDwave_analyse_elastic(varargin)%dt,f0,dh,dv,vpm,vsm)
 % ANALYSE_ELASTIC
 %       This function is used to check if parameters are satisfying CFL and dispersion condition.
 %       In case the conditions does not satisfy, this program will show a warning and continue exectuion.
@@ -22,6 +22,7 @@ function analyse_elastic(varargin)%dt,f0,dh,dv,vpm,vsm)
 
 
 global wfp
+global verbose
 
 for i=1:2:length(varargin)
     switch lower(varargin{i})

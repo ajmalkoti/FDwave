@@ -1,5 +1,4 @@
-function FDwave_source_plot(varargin)%figno,spind1,spind2,spind3)
-%FDWAVE_SOURCE_PLOT
+function FDwave_source_plot(varargin)
 % This function generates the Sine wavelet signature.
 % Complete Syntax:
 %       source_plot('WFP',path,'Wave_Type',option,'FigNO',value,'I1',value,'I2',value,'I3',value)

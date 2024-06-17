@@ -1,4 +1,4 @@
-function model_read_segy(varargin)%plotON,  crop_model,h1,v1,h2,v2,    interpolate,dh_new,dv_new )
+function FDwave_model_read_segy(varargin)%plotON,  crop_model,h1,v1,h2,v2,    interpolate,dh_new,dv_new )
 % MODEL_READ_SEGY
 % This function can load the segy file of marmousi model which is 
 % originally a fine scaled model with dx=dz=1.5m.
@@ -38,15 +38,15 @@ function model_read_segy(varargin)%plotON,  crop_model,h1,v1,h2,v2,    interpola
 %       The vector is in the form of e.g. [600,700,800,1000]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+global wfp
+global verbose
 
 disp('    FUNC: Model Building')
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 for i=1:2:length(varargin)
     switch lower(varargin{i})
-        case 'wave_type';                wave_type=varargin{i+1};
-        case 'wfp';                      wfp=varargin{i+1};
+        case 'wave_type';                wave_type=varargin{i+1};        
         case 'm_name';                   m_name=varargin{i+1};
         
         case 'crop_model';                  crop_model=varargin{i+1};
@@ -61,9 +61,7 @@ for i=1:2:length(varargin)
             
         case 'pad';                         pad_model=varargin{i+1};
         case 'padn';                        padN=varargin{i+1};
-        case 'padside';                     padSide=varargin{i+1};
-            
-        case 'verbose';                     verbose=varargin{i+1};
+        case 'padside';                     padSide=varargin{i+1};                    
         case 'ploton';                      plotON=varargin{i+1};
         otherwise
             error('%s is not a valid argument name',varargin{i});
@@ -99,7 +97,7 @@ if ~exist('interpolate','var');
     str3=['No',str0,'(Default)'];
 else
     str3='Yes';
-    if (~exist('dh_new','var')||~exist('dv_new','var'));
+    if (~exist('dh_new','var')||~exist('dv_new','var'))
         error('Not sufficient parameters to interpolate the model')
     end
 end
@@ -109,9 +107,16 @@ disp([str0,'Type of wave    : ',wave_type,str1] )
 disp([str0,'Cropped         : ',str2] )
 disp([str0,'Interpolated    : ',str3])
 
-if ~exist('pad_model','var');                      pad_model='n';         str3=['No',str0,'(Default)'];          end 
-if  exist('pad_model','var')&&strcmp(pad_model,'y');     str3='Yes';
-    if ~exist('padN','var')||~exist('padSide','var');            error('Not sufficient parameters to pad model');        end;
+if ~exist('pad_model','var')
+    pad_model='n';         
+    str3=['No',str0,'(Default)'];          
+end
+
+if  exist('pad_model','var')&&strcmp(pad_model,'y')     
+    str3='Yes';
+    if ~exist('padN','var')||~exist('padSide','var')
+        error('Not sufficient parameters to pad model');        
+    end
  end
 
 if ~exist('plotON','var')||strcmp('wave_type','-9999');           plotON='n';                  end;
@@ -121,48 +126,32 @@ if ~exist('verbose','var')||strcmp('wave_type','-9999');          verbose='n';  
 
 dh= 1.5;     dv= 1.5;     % Horizontal , Vertical grid spacing
 
-str=[wfp,'\Data_IP\',m_name,'_vp.segy'];
-if ~exist(str,'file');   error(['Velocity (Vp) file does not exists in input folder (',str,')']);   
-else                     vpm  = 1000*ReadSegy(str);
-end
+fname=[wfp,filesep,'Data_IP',filesep,m_name,'_vp.segy'];
+vpm = read_segy_error_msg(fname, 1000);
 
 if strcmp(wave_type,'acoustic2')
-    str=[wfp,'\Data_IP\',m_name,'_rho.segy'];
-    if ~exist(str,'file');      error(['Density (dens) file does not exists in input folder (',str,')']); 
-    else                        rhom =1000* ReadSegy(str);        
-    end
+    fname=[wfp,filesep,'Data_IP',filesep,m_name,'_rho.segy'];
+    rhom = read_segy_error_msg(fname, 1000);
     
 elseif strcmp(wave_type,'elastic')
-    str=[wfp,'\Data_IP\',m_name,'_vs.segy'];
-    if ~exist(str,'file');    error(['Velocity (Vs) file does not exists in input folder (',str,')']);   
-    else vsm  = 1000*ReadSegy(str);
-    end
+    fname=[wfp,filesep,'Data_IP',filesep,m_name,'_vs.segy'];
+    vsm = read_segy_error_msg(fname, 1000);
     
-    str=[wfp,'\Data_IP\',m_name,'_rho.segy'];
-    if ~exist(str,'file');    error(['Density (dens) file does not exists in input folder (',str,')']);   
-    else rhom = 1000*ReadSegy(str);
-    end
+    fname=[wfp,filesep,'Data_IP',filesep,m_name,'_rho.segy'];
+    rhom = read_segy_error_msg(fname, 1000);
    
 elseif strcmp(wave_type,'viscoelastic')
-     str=[wfp,'\Data_IP\',m_name,'_vs.segy'];
-    if ~exist(str,'file');    error(['Velocity (Vs) file does not exists in input folder (',str,')']);   
-    else vsm  = 1000*ReadSegy(str);
-    end
+    fname=[wfp,filesep,'Data_IP',filesep,m_name,'_vs.segy'];
+    vsm = read_segy_error_msg(fname, 1000);
     
-    str=[wfp,'\Data_IP\',m_name,'_rho.segy'];
-    if ~exist(str,'file');    error(['Density (dens) file does not exists in input folder (',str,')']);   
-    else rhom = 1000*ReadSegy(str);
-    end
+    fname=[wfp,filesep,'Data_IP',filesep,m_name,'_rho.segy'];
+    rhom = read_segy_error_msg(fname, 1000);
     
-    str=[wfp,'\Data_IP\',m_name,'_qp.segy'];
-    if ~exist(str,'file');    error(['Qp file does not exists in input folder (',str,')']);  
-    else qpm  = ReadSegy(str);
-    end
+    fname=[wfp,filesep,'Data_IP',filesep,m_name,'_qp.segy'];
+    qpm = read_segy_error_msg(fname,1);
     
-    str=[wfp,'\Data_IP\',m_name,'_qs.segy'];
-    if ~exist(str,'file');    error(['Qs file does not exists in input folder (',str,')']);  
-    else  qsm = ReadSegy(str);
-    end
+    fname=[wfp,filesep,'Data_IP',filesep,m_name,'_qs.segy'];
+    qsm = read_segy_error_msg(fname,1);
 end
 
 [nv,nh] = size(vpm);
@@ -309,28 +298,28 @@ end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-str=strcat(wfp,'\Data_IP\model');
+fname=strcat(wfp,filesep,'Data_IP',filesep,'model');
 % m_name='Marmousi_FineScale';
 
 if strcmp(wave_type,'acoustic1')
     %m_name='Homogeneous Acoustic 1 (scaler)';
 %     disp(['    Model selected:    ',wave_type,' -',m_name, ' model'])
-    save(str,'dh','dv','nh','nv','vpm','wave_type','m_name');
+    save(fname,'dh','dv','nh','nv','vpm','wave_type','m_name');
     
 elseif strcmp(wave_type,'acoustic2')
     %m_name='Homogeneous Acoustic 1 (scaler)';
 %     disp(['    Model selected:    ',wave_type,' -',m_name, ' model'])
-    save(str,'dh','dv','nh','nv','vpm','rhom','wave_type','m_name');    
+    save(fname,'dh','dv','nh','nv','vpm','rhom','wave_type','m_name');    
     
 elseif strcmp(wave_type,'elastic')
     %m_name='Homogeneous elastic';
 %     disp(['    Model selected:    ',wave_type,' -',m_name, ' model'])
-    save(str,'dh','dv','nh','nv','vpm','vsm','rhom','wave_type','m_name');
+    save(fname,'dh','dv','nh','nv','vpm','vsm','rhom','wave_type','m_name');
     
 elseif strcmp(wave_type,'viscoelastic')
     %m_name='Homogeneous viscoelastic';
 %     disp(['    Model selected:    ',wave_type,' -',m_name, ' model'])
-    save(str,'dh','dv','nh','nv','vpm','vsm','rhom','qpm','qsm','wave_type','m_name');
+    save(fname,'dh','dv','nh','nv','vpm','vsm','rhom','qpm','qsm','wave_type','m_name');
 else
     warning('      Wrong Name entered, No model saved')
 end
@@ -340,10 +329,21 @@ disp(['        dh =  ',num2str(dh)] )
 disp(['        dv =  ',num2str(dv)] )
 disp(['        nh =  ',num2str(nh)] )
 disp(['        nv =  ',num2str(nv)] )
-disp(['        Model saved in "',str])
+disp(['        Model saved in "',fname])
 
 if strcmp(plotON,'y')
     FDwave_model_plot('wfp',wfp)
 end
 
+end
+
+
+
+
+function mat = read_segy_error_msg(fname,scale)
+    if ~exist(fname,'file');    
+        error(['File does not exists in input folder (',fname,')']);   
+    else
+        mat = scale*ReadSegy(fname);
+    end
 end

@@ -1,4 +1,4 @@
-function [src,t] = source_sine(varargin)   %T,dt,f0,t0,src_scale)
+function [src,t] = FDwave_source_sine(varargin)   
 % SOURCE_SINE
 % This function generates the Sine wavelet signature.
 % Complete Syntax:

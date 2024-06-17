@@ -1,4 +1,4 @@
-function model_build_init( varargin )
+function FDwave_model_build_init( varargin )
 %MODEL_BUILD_INIT 
 % This function can be used to create a single layer of arbitrary shape.
 % The shape is defined by a set of points connected linearly.

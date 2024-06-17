@@ -1,4 +1,4 @@
-function nvpair_model_wedge(varargin)
+function FDwave_model_wedge(varargin)
 % MODEL_MARMOUSI_FINESCALE
 % This function can load the segy file of marmousi model which is 
 % originally a fine scaled model with dx=dz=1.5m.
